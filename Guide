@@ -1,0 +1,68 @@
+I used Ubuntu 20.04 LTS in a CT
+
+Run:
+sudo apt-get update && sudo apt-get upgrade -y
+
+Allow SFTP access with root:
+nano /etc/ssh/sshd_config
+
+Change the line below to this:
+  PermitRootLogin yes
+  
+systemctl restart sshd
+
+
+
+apt install gnupg
+
+wget -qO- https://repos.influxdata.com/influxdb.key | sudo apt-key add -
+source /etc/lsb-release
+echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+
+sudo apt-get update && sudo apt-get install influxdb
+sudo service influxdb start
+
+
+sudo nano /etc/influxdb/influxdb.conf
+
+[http]
+  enabled = true
+
+
+
+sudo systemctl stop influxdb && sudo systemctl start influxdb
+
+
+apt install curl
+
+curl -XPOST "http://localhost:8086/query" --data-urlencode "q=CREATE USER telegraf WITH PASSWORD 'telegraf' WITH ALL PRIVILEGES"
+
+// Telegraf Installation
+
+sudo apt-get install telegraf
+sudo service telegraf start
+
+Check the status:
+sudo systemctl status telegraf
+
+FTP to:
+/etc/telegraf/telegraf.conf
+
+Modify telegraf.conf with the follow:
+
+# # Read metrics from MQTT topic(s)
+
+[[outputs.influxdb]]
+urls = ["http://127.0.0.1:8086"]
+database = "telegraf"
+username = "telegraf"
+password = "telegraf"
+
+[[inputs.mqtt_consumer]]
+servers = ["tcp://192.168.1.24:1883"]
+topics = ["pws/sensors/+"]
+data_type = "float"
+data_format = "value"
+
+
+sudo systemctl restart telegraf
