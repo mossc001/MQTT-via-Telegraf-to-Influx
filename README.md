@@ -7,7 +7,7 @@ Operating System: Proxmox VE 6.4.x
 
 Container (LXC) Host Operating System: Ubuntu 20.04 Standard
 
-#Network
+# Network
 Topology: MQTT Broker > Telegraf > InfluxDB
 
 Firewall/Router: No modifications required
