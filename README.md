@@ -1,4 +1,4 @@
-# MQTT-via-Telegraf-to-Influx
+# MQTT via Telegraf to InfluxDB
 Capture MQTT topics via Telegraf and store then in InfluxDB
 
 This is a guide on how to listen to MQTT topics using Telegraf and store the data in Influx DB.
